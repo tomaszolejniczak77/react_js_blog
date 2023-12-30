@@ -3,8 +3,11 @@ import DataContext from "../context/DataContext";
 import api from "../api/posts";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import useWindowSize from "../hooks/useWindowSize";
 
 const NewPost = () => {
+  const { height } = useWindowSize();
+
   const [postTitle, setPostTitle] = useState("");
   const [postBody, setPostBody] = useState("");
   const { posts, setPosts } = useContext(DataContext);
@@ -28,30 +31,34 @@ const NewPost = () => {
   };
   return (
     <>
-      <main className="NewPost">
-        <h3>New Post</h3>
-        <form className="newPostForm" onSubmit={handleSubmit}>
-          <label htmlFor="postTitle">Title:</label>
-          <input
-            id="postTitle"
-            type="text"
-            required
-            value={postTitle}
-            onChange={(e) => setPostTitle(e.target.value)}
-          />
-          <label htmlFor="postBody">Post:</label>
-          <textarea
-            rows="10"
-            id="postBody"
-            required
-            onChange={(e) => setPostBody(e.target.value)}
-            value={postBody}
-          ></textarea>
-          <button className="submit-btn" type="submit">
-            Add New Post
-          </button>
-        </form>
-      </main>
+      {height < 600 ? (
+        <p className="heightInfo">Please rotate your device to add new post!</p>
+      ) : (
+        <main className="NewPost">
+          <h3>New Post</h3>
+          <form className="newPostForm" onSubmit={handleSubmit}>
+            <label htmlFor="postTitle">Title:</label>
+            <input
+              id="postTitle"
+              type="text"
+              required
+              value={postTitle}
+              onChange={(e) => setPostTitle(e.target.value)}
+            />
+            <label htmlFor="postBody">Post:</label>
+            <textarea
+              rows="10"
+              id="postBody"
+              required
+              onChange={(e) => setPostBody(e.target.value)}
+              value={postBody}
+            ></textarea>
+            <button className="submit-btn" type="submit">
+              Add New Post
+            </button>
+          </form>
+        </main>
+      )}
     </>
   );
 };
